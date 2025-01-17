@@ -21,8 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' # Use a compatible Node.js version
-
+          node-version: '16' 
       # Step 3: Install Newman
       - name: Install Newman
         run: npm install -g newman
@@ -35,7 +34,7 @@ jobs:
                   --reporters cli,json \
                   --reporter-json-export newman-report.json
 
-      # Step 5: Upload Newman Report (Optional)
+      # Step 5: Upload Newman Report 
       - name: Upload Newman Report
         uses: actions/upload-artifact@v3
         with:
