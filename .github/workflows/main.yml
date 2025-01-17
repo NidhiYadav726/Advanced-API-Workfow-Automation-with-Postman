@@ -1,0 +1,43 @@
+name: Run Advanced Postman Collection
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-postman-collection:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (required for Newman)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Use a compatible Node.js version
+
+      # Step 3: Install Newman
+      - name: Install Newman
+        run: npm install -g newman
+
+      # Step 4: Run the Postman collection
+      - name: Run Postman Collection
+        run: |
+          newman run Go Rest API Testing.postman_collection.json \
+          --environment New Environment.postman_environment.json \
+          --reporters cli,json \
+          --reporter-json-export newman-report.json
+
+      # Step 5: Upload Newman Report (Optional)
+      - name: Upload Newman Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-report
+          path: newman-report.json
