@@ -30,10 +30,10 @@ jobs:
       # Step 4: Run the Postman collection
       - name: Run Postman Collection
         run: |
-          newman run Go Rest API Testing.postman_collection.json \
-          --environment New Environment.postman_environment.json \
-          --reporters cli,json \
-          --reporter-json-export newman-report.json
+          newman run "Go Rest API Testing.postman_collection.json" \
+                  --environment "New Environment.postman_environment.json" \
+                  --reporters cli,json \
+                  --reporter-json-export newman-report.json
 
       # Step 5: Upload Newman Report (Optional)
       - name: Upload Newman Report
