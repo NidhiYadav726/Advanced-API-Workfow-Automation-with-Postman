@@ -27,36 +27,54 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
-      # Run API Tests using CSV data (for dynamic data-driven testing)
+      # Step 4: Run API Tests with Dynamic Data
       - name: Run API Tests with CSV Data
         run: |
+          mkdir -p newman_reports/dynamic
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
             -d ./data.csv \
-            --reporters cli,html \
-            --reporter-html-export ./newman_reports/csv_data_report.html
+            --reporters cli,html,json \
+            --reporter-html-export ./newman_reports/dynamic/dynamic_data_report.html \
+            --reporter-json-export ./newman_reports/dynamic/dynamic_data_report.json
 
-      # Run Load Testing using Newman (using Postman collection with stress/load scenario)
+      # Step 5: Run Load Testing
       - name: Run Load Testing
         run: |
+          mkdir -p newman_reports/load
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
             -n 10 \
             --delay-request 100 \
-            --reporters cli,html \
-            --reporter-html-export ./newman_reports/load_test_report.html
+            --reporters cli,html,json \
+            --reporter-html-export ./newman_reports/load/load_test_report.html \
+            --reporter-json-export ./newman_reports/load/load_test_report.json
 
-      # Step 4: Run the Postman collection
-      - name: Run Postman Collection
+      # Step 6: Run Normal Postman Collection
+      - name: Run Normal Postman Collection
         run: |
+          mkdir -p newman_reports/normal
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
-            --reporters cli,json \
-            --reporter-json-export newman-report.json
+            --reporters cli,html,json \
+            --reporter-html-export ./newman_reports/normal/normal_test_report.html \
+            --reporter-json-export ./newman_reports/normal/normal_test_report.json
 
-      # Step 5: Upload Newman Report 
-      - name: Upload Newman Report
+      # Step 7: Upload Newman Reports as Artifacts
+      - name: Upload Dynamic Data Report
         uses: actions/upload-artifact@v3
         with:
-          name: newman-report
-          path: newman-report.json
+          name: dynamic-data-report
+          path: newman_reports/dynamic
+
+      - name: Upload Load Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: load-test-report
+          path: newman_reports/load
+
+      - name: Upload Normal Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: normal-test-report
+          path: newman_reports/normal
