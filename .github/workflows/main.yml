@@ -37,8 +37,8 @@ jobs:
             --environment "New Environment.postman_environment.json" \
             -d ./data.csv \
             --reporters cli,html,dashboard \
-            --reporter-dashboard-export ./newman_reports/dynamic/dynamic_data_report.json \
-            --reporter-html-export ./newman_reports/dynamic/dynamic_data_report.html
+            --reporter-dashboard-export ./dynamic_data_report.json \
+            --reporter-html-export ./dynamic_data_report.html
 
       # Step 5: Run Load Testing
       - name: Run Load Testing
@@ -46,11 +46,11 @@ jobs:
           mkdir -p newman_reports/load
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
-            -n 10 \
+            -n 2 \
             --delay-request 100 \
             --reporters cli,html,dashboard \
-            --reporter-dashboard-export ./newman_reports/load/load_test_report.json \
-            --reporter-html-export ./newman_reports/load/load_test_report.html
+            --reporter-dashboard-export ./load_test_report.json \
+            --reporter-html-export ./load_test_report.html
 
       # Step 6: Run Normal Postman Collection
       - name: Run Normal Postman Collection
@@ -59,8 +59,8 @@ jobs:
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
             --reporters cli,html,dashboard \
-            --reporter-dashboard-export ./newman_reports/normal/normal_test_report.json \
-            --reporter-html-export ./newman_reports/normal/normal_test_report.html
+            --reporter-dashboard-export ./normal_test_report.json \
+            --reporter-html-export ./normal_test_report.html
 
       # Step 7: Upload Newman Reports as Artifacts
       - name: Upload Dynamic Data Report
