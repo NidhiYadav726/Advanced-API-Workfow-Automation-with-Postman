@@ -35,6 +35,7 @@ jobs:
           mkdir -p newman_reports/dynamic
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
+            --folder "DYNAMIC DATA HANDLING" \
             -d ./data.csv \
             --reporters cli,html \
             --reporter-html-export ./newman_reports/dynamic/dynamic_data_report.html
@@ -45,6 +46,7 @@ jobs:
           mkdir -p newman_reports/load
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
+            --folder "PERFORMANCE AND LOAD TESTING" \
             -n 10 \
             --delay-request 100 \
             --reporters cli,html \
