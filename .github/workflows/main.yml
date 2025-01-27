@@ -29,7 +29,7 @@ jobs:
           npm install -g newman
           npm install -g newman-reporter-html
 
-      # Step 4: Run API Tests with Dynamic Data
+      # Step 4: Run API Tests implementing Dynamic Data Handling using CSV
       - name: Run API Tests with CSV Data
         run: |
           mkdir -p newman_reports/dynamic
@@ -38,7 +38,7 @@ jobs:
             --folder "DYNAMIC DATA HANDLING" \
             -d ./data.csv \
             --reporters cli,html \
-            --reporter-html-export ./newman_reports/dynamic/dynamic_data_report.html
+            --reporter-html-export ./newman_reports/dynamic/dynamic_data_handling_report.html
 
       # Step 5: Run Load and Performance Testing
       - name: Run Load Testing
@@ -52,15 +52,15 @@ jobs:
             --reporters cli,html \
             --reporter-html-export ./newman_reports/load/load_test_report.html
 
-      # Step 6: Run Normal Postman Collection
-      - name: Run Normal Postman Collection
+      # Step 6: Run Postman Collection for implementing CRUD ( chaining requests, environment variables )
+      - name: Run Postman CRUD OPERATIONS 
         run: |
           mkdir -p newman_reports/normal
           newman run "Advanced API Automation using Postman.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
             --folder "CRUD OPERATIONS" \
             --reporters cli,html \
-            --reporter-html-export ./newman_reports/normal/normal_test_report.html
+            --reporter-html-export ./newman_reports/crud/CRUD_OPERATIONS_report.html
 
       # Step 7: Trigger Postman Monitor via API
       - name: Trigger Postman Monitor
