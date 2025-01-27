@@ -21,31 +21,38 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' 
+          node-version: '16'
+
       # Step 3: Install Newman
       - name: Install Newman
         run: npm install -g newman
 
       # Run API Tests using CSV data (for dynamic data-driven testing)
       - name: Run API Tests with CSV Data
-        run: | 
-         newman run  "Go Rest API Testing.postman_collection.json" \
-                  --environment "New Environment.postman_environment.json" \ -d /data.csv --reporters cli,html --reporter-html-export ./newman_reports/csv_data_report.html
-    
+        run: |
+          newman run "Go Rest API Testing.postman_collection.json" \
+            --environment "New Environment.postman_environment.json" \
+            -d /data.csv \
+            --reporters cli,html \
+            --reporter-html-export ./newman_reports/csv_data_report.html
+
       # Run Load Testing using Newman (using Postman collection with stress/load scenario)
       - name: Run Load Testing
         run: |
-         newman run  "Go Rest API Testing.postman_collection.json" \
-                  --environment "New Environment.postman_environment.json" \ -n 1000 --delay-request 100 --reporters cli,html --reporter-html-export ./newman_reports/load_test_report.html
-
+          newman run "Go Rest API Testing.postman_collection.json" \
+            --environment "New Environment.postman_environment.json" \
+            -n 1000 \
+            --delay-request 100 \
+            --reporters cli,html \
+            --reporter-html-export ./newman_reports/load_test_report.html
 
       # Step 4: Run the Postman collection
       - name: Run Postman Collection
         run: |
           newman run "Go Rest API Testing.postman_collection.json" \
-                  --environment "New Environment.postman_environment.json" \
-                  --reporters cli,json \
-                  --reporter-json-export newman-report.json
+            --environment "New Environment.postman_environment.json" \
+            --reporters cli,json \
+            --reporter-json-export newman-report.json
 
       # Step 5: Upload Newman Report 
       - name: Upload Newman Report
