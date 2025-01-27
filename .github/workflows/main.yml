@@ -70,7 +70,7 @@ jobs:
           --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}"
 
       # Step 7: Upload Newman Reports as Artifacts
-      - name: Upload Dynamic Data Report
+      - name: Upload Dynamic Data Handling Report
         uses: actions/upload-artifact@v3
         with:
           name: dynamic-data-report
@@ -82,7 +82,7 @@ jobs:
           name: load-test-report
           path: newman_reports/load
 
-      - name: Upload Normal Test Report
+      - name: Upload Crud Operations Report
         uses: actions/upload-artifact@v3
         with:
           name: normal-test-report
