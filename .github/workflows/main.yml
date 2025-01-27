@@ -70,6 +70,13 @@ jobs:
           --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}"
 
       # Step 6: Upload Newman Reports as Artifacts
+      
+      - name: Upload Crud Operations Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: normal-test-report
+          path: newman_reports/crud
+          
       - name: Upload Dynamic Data Handling Report
         uses: actions/upload-artifact@v3
         with:
@@ -82,8 +89,3 @@ jobs:
           name: load-test-report
           path: newman_reports/load
 
-      - name: Upload Crud Operations Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: normal-test-report
-          path: newman_reports/normal
