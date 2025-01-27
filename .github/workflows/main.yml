@@ -23,11 +23,12 @@ jobs:
         with:
           node-version: '16'
 
-      # Step 3: Install Newman and HTML Reporter
-      - name: Install Newman and HTML Reporter
+      # Step 3: Install Newman, HTML Reporter, and Newman Dashboard Reporter
+      - name: Install Newman, HTML Reporter, and Newman Dashboard Reporter
         run: |
           npm install -g newman
           npm install -g newman-reporter-html
+          npm install -g newman-reporter-dashboard
 
       # Step 4: Run API Tests with Dynamic Data
       - name: Run API Tests with CSV Data
@@ -36,8 +37,9 @@ jobs:
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
             -d ./data.csv \
-            --reporters cli,html \
-            --reporter-html-export ./newman_reports/dynamic/dynamic_data_report.html
+            --reporters cli,html,dashboard \
+            --reporter-html-export ./newman_reports/dynamic/dynamic_data_report.html \
+            --reporter-dashboard-export ./newman_reports/dynamic/dashboard_report_dynamic.html
 
       # Step 5: Run Load Testing
       - name: Run Load Testing
@@ -47,26 +49,28 @@ jobs:
             --environment "New Environment.postman_environment.json" \
             -n 10 \
             --delay-request 100 \
-            --reporters cli,html \
-            --reporter-html-export ./newman_reports/load/load_test_report.html
+            --reporters cli,html,dashboard \
+            --reporter-html-export ./newman_reports/load/load_test_report.html \
+            --reporter-dashboard-export ./newman_reports/load/dashboard_report_load.html
 
-      # Step 6: Run Normal Postman Collection
+      # Step 6: Run Normal Postman Collection ( implementing request chaining, environment variables)
       - name: Run Normal Postman Collection
         run: |
           mkdir -p newman_reports/normal
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
-            --reporters cli,html \
-            --reporter-html-export ./newman_reports/normal/normal_test_report.html
+            --reporters cli,html,dashboard \
+            --reporter-html-export ./newman_reports/normal/normal_test_report.html \
+            --reporter-dashboard-export ./newman_reports/normal/dashboard_report_normal.html
 
-      # Step 7: Trigger Postman Monitor via API
+      # Step 7: Trigger Postman Monitor via API 
       - name: Trigger Postman Monitor
         run: |
           curl --request POST \
-          --url https://api.getpostman.com/monitors/{1efc1c44-65f0-4d80-84ec-5773eb576a58}/run \
+          --url https://api.getpostman.com/monitors/{monitor_id}/run \
           --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}"
 
-      # Step 7: Upload Newman Reports as Artifacts
+      # Step 8: Upload Newman Reports as Artifacts
       - name: Upload Dynamic Data Report
         uses: actions/upload-artifact@v3
         with:
