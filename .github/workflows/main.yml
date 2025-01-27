@@ -32,7 +32,7 @@ jobs:
         run: |
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
-            -d /data.csv \
+            -d ./data.csv \
             --reporters cli,html \
             --reporter-html-export ./newman_reports/csv_data_report.html
 
