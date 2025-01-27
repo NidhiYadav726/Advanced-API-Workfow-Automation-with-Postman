@@ -1,0 +1,1497 @@
+{
+	"info": {
+		"_postman_id": "85bfd753-3dd6-4443-b1b2-86cfc0837be7",
+		"name": "Go Rest API Testing",
+		"description": "#### **Overview:**\n\nThis Postman collection provides the suite of tests for performing CRUD (Create, Read, Update, and Delete) operations on users in the GoRest API. The tests are designed to ensure the API behaves correctly when creating, reading, updating, and deleting user data, and to verify that appropriate responses are returned for each operation.\n\n#### **1\\. Create User (POST Request):**\n\n- **Description**: This request tests the ability to create a new user in the GoRest API.\n    \n- **Test Objective**: Verify that the user is successfully created with valid data and the correct status code (201).\n    \n\n#### **2\\. Read User (GET Request):**\n\n- **Description**: This request tests the ability to fetch the details of a specific user.\n    \n- **Test Objective**: Ensure that a user can be retrieved by ID with a successful response.\n    \n\n#### **3\\. Update User (PUT Request):**\n\n- **Description**: This request tests the ability to update user details.\n    \n- **Test Objective**: Ensure that a user's details can be updated successfully, including fields like name and status.\n    \n\n#### **4\\. Delete User (DELETE Request):**\n\n- **Description**: This request tests the ability to delete a user from the GoRest API.\n    \n- **Test Objective**: Verify that a user can be deleted successfully and that the user no longer exists in the system.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36698587"
+	},
+	"item": [
+		{
+			"name": "CREATE USERS using POST METHOD",
+			"item": [
+				{
+					"name": "POSITIVE TEST CASES",
+					"item": [
+						{
+							"name": "Create user with all Valid Fields",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// Set a random name for testing",
+											"const randomName = \"User_\" + Math.floor(Math.random() * 1000);",
+											"pm.environment.set(\"random_name\", randomName);",
+											"console.log(\"Using random name: \" + randomName);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"pm.test(\"User ID is present\", function () {",
+											"    pm.expect(jsonData).to.have.property('id');",
+											"    pm.environment.set(\"valid_id\", jsonData.id); // Store valid ID for future requests",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{$randomFirstName}}\",\n    \"gender\": \"male\",\n    \"email\": \"{{$randomEmail}}\",\n    \"status\": \"active\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer your_access_token_here\" -X POST \"https://gorest.co.in/public/v2/users\" -d '{\n    \"name\": \"John Doe\",\n    \"gender\": \"male\",\n    \"email\": \"johndoe123@example.com\",\n    \"status\": \"active\"\n}'\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user with special characters in name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"// Test for specific property in the response body",
+											"pm.test(\"Response body contains 'name' property\", function () {",
+											"    pm.expect(pm.response.json()).to.have.property('name');",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"John@-12\",\n    \"gender\": \"male\",\n    \"email\": \"{{$randomEmail}}\",\n    \"status\": \"active\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create user with maximum length fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"// Test for response body properties",
+											"pm.test(\"Response body has name property\", function () {",
+											"    pm.expect(pm.response.json()).to.have.property('name');",
+											"});",
+											"pm.test(\"Response body has gender property\", function () {",
+											"    pm.expect(pm.response.json()).to.have.property('gender');",
+											"});",
+											"pm.test(\"Response body has email property\", function () {",
+											"    pm.expect(pm.response.json()).to.have.property('email');",
+											"});",
+											"pm.test(\"Response body has status property\", function () {",
+											"    pm.expect(pm.response.json()).to.have.property('status');",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Aditya Anil Kumar Kanojiya.............................................................\",\n    \"gender\": \"male\",\n    \"email\": \"{{$randomEmail}}\",\n    \"status\": \"active\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of positive test cases for CREATE USERS OPERTAION"
+				},
+				{
+					"name": "NEGATIVE TEST CASES",
+					"item": [
+						{
+							"name": "Create user with missing required fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {",
+											"    pm.response.to.have.status(422);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{randomFirstName}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer your_access_token_here\" -X POST \"https://gorest.co.in/public/v2/users\" -d '{\n    \"name\": \"John Doe\"\n}'\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user with Invalid gender value",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {",
+											"    pm.response.to.have.status(422);",
+											"",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{randomFirstName}}\",\n    \"gender\": \"invalid\",\n    \"email\": \"{{$randomEmail}}\",\n    \"status\": \"active\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer your_access_token_here\" -X POST \"https://gorest.co.in/public/v2/users\" -d '{\n    \"name\": \"John Doe\",\n    \"gender\": \"invalid\",\n    \"email\": \"johndoe123@example.com\",\n    \"status\": \"active\"\n}'\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user with invalid email format",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {",
+											"    pm.response.to.have.status(422);",
+											"});",
+											"",
+											"pm.test(\"Validate the email format is not valid\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData.email).to.not.match(/^([\\w.%+-]+)@([a-z0-9-]+\\.)+([a-z]{2,})$/);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{randomFirstName}}\",\n    \"gender\": \"male\",\n    \"email\": \"invalid-email\",\n    \"status\": \"active\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer your_access_token_here\" -X POST \"https://gorest.co.in/public/v2/users\" -d '{\n    \"name\": \"John Doe\",\n    \"gender\": \"male\",\n    \"email\": \"invalid-email\",\n    \"status\": \"active\"\n}'\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user with an existing email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {",
+											"    pm.response.to.have.status(422);",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{$randomFirstName}}\",\n    \"gender\": \"male\",\n    \"email\": \"existing@example.com\",\n    \"status\": \"active\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer your_access_token_here\" -X POST \"https://gorest.co.in/public/v2/users\" -d '{\n    \"name\": \"John Doe\",\n    \"gender\": \"male\",\n    \"email\": \"existing@example.com\",\n    \"status\": \"active\"\n}'\n"
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of negative test cases of CREATE USERS OPERATION"
+				}
+			],
+			"description": "**Purpose:**  \nEndpoints in this folder handle the creation of new resources in the system."
+		},
+		{
+			"name": "AUTHENTICATION",
+			"item": [
+				{
+					"name": "POSITIVE TEST CASES",
+					"item": [
+						{
+							"name": "Read users using Valid Token",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// Ensure access token is set",
+											"if (!pm.environment.get(\"access_token\")) {",
+											"    throw new Error(\"Access token is missing. Please set the access_token environment variable.\");",
+											"}",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Authorization: Bearer your_access_token_here\" -X GET \"https://gorest.co.in/public/v2/users\"\n"
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of positive test cases of AUTHENTICATION RELATED OPERATION"
+				},
+				{
+					"name": "NEGATIVE TEST CASES",
+					"item": [
+						{
+							"name": "Read users using Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "0d9f63ab68bbb9aad819ff6f78aa79b93494b760af0d93a36188f2a65f4168961b0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Authorization: Bearer invalid_token\" -X GET \"https://gorest.co.in/public/v2/users\"\n"
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of negative test cases of AUTHENTICATION RELATED OPERATION"
+				}
+			],
+			"description": "**Purpose:**  \nEndpoints in this folder handle the authorization using the bearer tokens in the system."
+		},
+		{
+			"name": "READ USERS using GET METHOD",
+			"item": [
+				{
+					"name": "POSITIVE TEST CASES",
+					"item": [
+						{
+							"name": "Read newly created user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// Test for specific user properties",
+											"var jsonData = pm.response.json(); ",
+											"pm.test(\"User has a name\", function () {",
+											"    pm.expect(jsonData.name).to.be.a('string');",
+											"});",
+											"",
+											"pm.test(\"User has a valid email\", function () {",
+											"    pm.expect(jsonData.email).to.include('@');",
+											"});",
+											"",
+											"pm.test(\"User has a gender\", function () {",
+											"    pm.expect(jsonData.gender).to.be.oneOf(['male', 'female']);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -X GET \"https://gorest.co.in/public/v2/users/{valid_id}\"\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Read users using Filters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"pm.test(\"Response should be an array of users filtered by criteria\", function () {",
+											"    if (jsonData.length > 0) {",
+											"        jsonData.forEach(user => {",
+											"            pm.expect(user.gender).to.equal('male');",
+											"            pm.expect(user.status).to.equal('active');",
+											"        });",
+											"    }",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/?gender=male&status=active",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									],
+									"query": [
+										{
+											"key": "gender",
+											"value": "male"
+										},
+										{
+											"key": "status",
+											"value": "active"
+										}
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -X GET \"https://gorest.co.in/public/v2/users?gender=male&status=active\"\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Read users using Pagination",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const jsonData = pm.response.json();",
+											"pm.test(\"Response should be an array of users\", function () {",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/?page=1&per_page=20",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										""
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "20"
+										}
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -X GET \"https://gorest.co.in/public/v2/users?page=1&per_page=20\"\n"
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of positive test cases for FETCH USERS OPERTAION"
+				},
+				{
+					"name": "NEGATIVE TEST CASES",
+					"item": [
+						{
+							"name": "Read a non-existent user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/99999999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"99999999"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -X GET \"https://gorest.co.in/public/v2/users/99999999\"\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Read a user with invalid Id Format",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/1a",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"1a"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -X GET \"https://gorest.co.in/public/v2/users/invalid\"\n"
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of negative test cases for FETCH USERS OPERTAION"
+				}
+			],
+			"description": "**Purpose:**  \nEndpoints in this folder retrieve resources or information from the system."
+		},
+		{
+			"name": "UPDATE USERS using PUT METHOD",
+			"item": [
+				{
+					"name": "POSITIVE TEST CASES",
+					"item": [
+						{
+							"name": "Update user with valid updated values",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// Ensure valid_id is set before updating user",
+											"if (!pm.environment.get(\"valid_id\")) {",
+											"    throw new Error(\"Valid user ID (valid_id) is missing.\");",
+											"}",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// Test for response body properties after update",
+											"pm.test(\"Response body has updated status\", function () {",
+											"    pm.expect(pm.response.json().status).to.eql(\"inactive\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{$randomFirstName}}\",\n    \"status\": \"inactive\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer your_access_token_here\" -X PUT \"https://gorest.co.in/public/v2/users/{valid_id}\" -d '{\n    \"name\": \"John Doe Updated\",\n    \"status\": \"inactive\"\n}'\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Update user with special characters in name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"// Test for the request method",
+											"pm.test(\"Request method is PUT\", function () {",
+											"    pm.expect(pm.request.method).to.eql(\"PUT\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Rose53##\",\n    \"status\": \"inactive\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of positive test cases for UPDATE USERS OPERTAION"
+				},
+				{
+					"name": "NEGATIVE TEST CASES",
+					"item": [
+						{
+							"name": "Update user using Invalid Email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {",
+											"    pm.response.to.have.status(422);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n         \"email\": \"invalid-email\"\n     }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" \\\n     -H \"Content-Type: application/json\" \\\n     -H \"Authorization: Bearer your_access_token_here\" \\\n     -X PUT \"https://gorest.co.in/public/v2/users/{valid_id}\" \\\n     -d '{\n         \"email\": \"invalid-email\"\n     }'\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Update user with empty fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {",
+											"    pm.response.to.have.status(422);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"\", \"email\": \"\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" \\\n     -H \"Content-Type: application/json\" \\\n     -H \"Authorization: Bearer $TOKEN\" \\\n     -X PUT \"https://gorest.co.in/public/v2/users/{valid_id}\" \\\n     -d '{\"name\": \"\", \"email\": \"\"}'"
+							},
+							"response": []
+						},
+						{
+							"name": "Update a non existing user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n         \"name\": \"{{$randomFirstName}}\",\n         \"status\": \"inactive\"\n     }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/99999999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"99999999"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" \\\n     -H \"Content-Type: application/json\" \\\n     -H \"Authorization: Bearer your_access_token_here\" \\\n     -X PUT \"https://gorest.co.in/public/v2/users/99999999\" \\\n     -d '{\n         \"name\": \"Updated Name\",\n         \"status\": \"inactive\"\n     }'\n"
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of negative test cases for UPDATE USERS OPERTAION"
+				}
+			],
+			"description": "**Purpose:**  \nEndpoints in this folder modify or update resources in the system."
+		},
+		{
+			"name": "DELETE USERS using DELETE METHOD",
+			"item": [
+				{
+					"name": "POSITIVE TEST CASES",
+					"item": [
+						{
+							"name": "Delete a valid existent user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// Ensure valid_id is set before deleting user",
+											"if (!pm.environment.get(\"valid_id\")) {",
+											"    throw new Error(\"Valid user ID (valid_id) is missing.\");",
+											"}",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {",
+											"    pm.response.to.have.status(204); ",
+											"});",
+											"",
+											"// Optionally, check if the user still exists after deletion (GET request)",
+											"let deletedUserId = pm.environment.get(\"valid_id\");",
+											"pm.sendRequest({",
+											"    url: `https://gorest.co.in/public/v2/users/${deletedUserId}`,",
+											"    method: 'GET',",
+											"}, (err, res) => {",
+											"    if (res) {",
+											"        pm.test(\"Deleted user should return a status of 404\", function () {",
+											"            pm.expect(res).to.have.property('code', 404);",
+											"        });",
+											"    }",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" \\\n     -H \"Authorization: Bearer $TOKEN\" \\\n     -X DELETE \"https://gorest.co.in/public/v2/users/{valid_id}\""
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch an already deleted user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404); ",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of positive test cases for DELETE USERS OPERTAION"
+				},
+				{
+					"name": "NEGATIVE TEST CASES",
+					"item": [
+						{
+							"name": "Delete an already deleted user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404); ",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{valid_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{valid_id}}"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" \\\n     -H \"Authorization: Bearer $TOKEN\" \\\n     -X DELETE \"https://gorest.co.in/public/v2/users/{valid_id}\""
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a non existent user with invalid id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/99999999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"99999999"
+									]
+								},
+								"description": "Generated from cURL: curl -i -H \"Accept: application/json\" \\\n     -H \"Authorization: Bearer $TOKEN\" \\\n     -X DELETE \"https://gorest.co.in/public/v2/users/99999999\""
+							},
+							"response": []
+						}
+					],
+					"description": "Consists of negative test cases for DELETE USERS OPERTAION"
+				}
+			],
+			"description": "**Purpose:**  \nEndpoints in this folder handle the removal of resources from the system."
+		},
+		{
+			"name": "PERFORMANCE and LOAD TESTING",
+			"item": [
+				{
+					"name": "Fetch all Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.response.to.have.responseTime.lessThan(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a new Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains product name\", function () {",
+									"    const jsonResponse = pm.response.json();",
+									"    pm.expect(jsonResponse).to.have.property(\"name\", \"New Product\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"New Product\",\n  \"price\": 25.99,\n  \"category\": \"Electronics\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "#### **Overview:**\n\nThis is designed to perform **performance and load testing** of the GoRest API using a data-driven approach. By utilizing Postman Collection Runner with multiple data sets, the collection is able to simulate multiple user interactions with the API to assess its performance under varying loads.\n\n#### **Data-Driven Performance Testing:**\n\n- **Description**: This testing method involves running a series of tests using multiple sets of data to simulate realistic user load and measure the API's performance.\n    \n- **Test Objective**: Test the GoRest API's scalability and response times under different scenarios, including various numbers of users, data inputs, and actions.\n    \n- **Test Steps**:\n    \n    - Create a CSV or JSON file containing multiple sets of test data (e.g., user IDs, names, statuses).\n        \n    - Use Postman’s Collection Runner to run the collection with different data sets from the CSV/JSON file.\n        \n    - For each iteration, measure the API's response time, status codes, and performance metrics.\n        \n\n#### **Load Testing using Postman Collection Runner:**\n\n- **Description**: This test will simulate multiple concurrent requests to test how the GoRest API handles high traffic and multiple users at the same time.\n    \n- **Test Objective**: Evaluate the API’s response times, throughput, and behavior under simulated user loads.\n    \n- **Test Steps**:\n    \n    - Use Postman Collection Runner to send multiple requests to the API concurrently (adjust the number of iterations and delay).\n        \n    - Monitor the response times and check for performance degradation or failures.\n        \n    - Validate the API can handle high traffic without significantly increasing response times or returning errors.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "DYNAMIC DATA HANDLING",
+			"item": [
+				{
+					"name": "Add new products using CSV file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Response contains product name\", function () {",
+									"    const jsonResponse = pm.response.json();",
+									"    pm.expect(jsonResponse).to.have.property(\"name\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name}}\",\n  \"price\": {{price}},\n  \"category\": \"{{category}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This folder is designed to demonstrate dynamic data handling with the ReqRes API for adding new products.\n\nA CSV file is used to add 3 new products along with their respective name, price and category.\n\n- **Description**: This involves running a series of tests using multiple sets of data to simulate realistic user load and measure the API's performance.\n    \n- **Test Objective**: Test the Reqres API's scalability and response times under different scenarios, including various numbers of data inputs, and actions.\n    \n- **Test Steps**:\n    \n    - Create a CSV or JSON file containing multiple sets of test data (e.g., user IDs, names, statuses).\n        \n    - Use Postman’s Collection Runner to run the collection with different data sets from the CSV/JSON file.\n        \n    - For each iteration, measure the API's response time, status codes, and performance metrics.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "0d9f63ab689aad819ff6f78aa79b93494b760af0d93a36188f2a65f4168961b0",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.execution.setNextRequest(); // Delay subsequent requests ",
+					"setTimeout(() => {",
+					"    // Resume after delay",
+					"}, 1000);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
