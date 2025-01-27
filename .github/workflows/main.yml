@@ -59,8 +59,7 @@ jobs:
             --folder "PERFORMANCE and LOAD TESTING" \
             -n 10 \
             --delay-request 100 \
-            --reporters cli,htmlextra
-            \
+            --reporters cli,htmlextra \
             --reporter-htmlextra-export ./newman_reports/load/load_test_report.html
 
       # Step 5: Trigger Postman Monitor via API
