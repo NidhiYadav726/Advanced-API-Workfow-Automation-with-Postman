@@ -46,7 +46,7 @@ jobs:
           mkdir -p newman_reports/load
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
-            --folder "PERFORMANCE AND LOAD TESTING" \
+            --folder "PERFORMANCE and LOAD TESTING" \
             -n 10 \
             --delay-request 100 \
             --reporters cli,html \
