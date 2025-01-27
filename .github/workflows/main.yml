@@ -59,6 +59,13 @@ jobs:
             --reporters html \
             --reporter-html-export ./newman_reports/normal/normal_test_report.html
 
+      # Step 7: Trigger Postman Monitor via API
+      - name: Trigger Postman Monitor
+        run: |
+          curl --request POST \
+          --url https://api.getpostman.com/monitors/{monitor_id}/run \
+          --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}"
+
       # Step 7: Upload Newman Reports as Artifacts
       - name: Upload Dynamic Data Report
         uses: actions/upload-artifact@v3
