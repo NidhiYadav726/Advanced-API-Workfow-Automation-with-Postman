@@ -58,6 +58,7 @@ jobs:
           mkdir -p newman_reports/normal
           newman run "Go Rest API Testing.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
+            --folder "CRUD OPERATIONS" \
             --reporters cli,html \
             --reporter-html-export ./newman_reports/normal/normal_test_report.html
 
