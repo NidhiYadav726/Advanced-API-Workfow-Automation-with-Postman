@@ -63,7 +63,7 @@ jobs:
       - name: Trigger Postman Monitor
         run: |
           curl --request POST \
-          --url https://api.getpostman.com/monitors/{monitor_id}/run \
+          --url https://api.getpostman.com/monitors/{1efc1c44-65f0-4d80-84ec-5773eb576a58}/run \
           --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}"
 
       # Step 7: Upload Newman Reports as Artifacts
