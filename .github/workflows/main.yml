@@ -32,12 +32,12 @@ jobs:
       # Step 4: Run Postman Collection for implementing CRUD ( chaining requests, environment variables )
       - name: Run Postman CRUD OPERATIONS 
         run: |
-          mkdir -p newman_reports/normal
+          mkdir -p newman_reports/crud_operations
           newman run "Advanced API Automation using Postman.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
             --folder "CRUD OPERATIONS" \
             --reporters cli,htmlextra \
-            --reporter-htmlextra-export ./newman_reports/crud/CRUD_OPERATIONS_report.html
+            --reporter-htmlextra-export ./newman_reports/crud_operations/CRUD_OPERATIONS_report.html
 
       # Step 4a: Run API Tests implementing Dynamic Data Handling using CSV
       - name: Run API Tests with CSV Data
@@ -74,8 +74,8 @@ jobs:
       - name: Upload Crud Operations Report
         uses: actions/upload-artifact@v3
         with:
-          name: normal-test-report
-          path: newman_reports/crud
+          name: CRUD_OPERATIONS_report
+          path: newman_reports/crud_operations
           
       - name: Upload Dynamic Data Handling Report
         uses: actions/upload-artifact@v3
