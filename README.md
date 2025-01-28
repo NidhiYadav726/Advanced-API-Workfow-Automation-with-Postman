@@ -1,6 +1,6 @@
 # Advanced API Automation Using Postman
 
-This repository contains a comprehensive Postman collection designed to automate advanced API testing scenarios. The collection is focused on **CRUD operations**, **Dynamic Data Handling**, and **Performance/Load Testing** across different APIs.
+This repository contains a comprehensive Postman collection designed to automate advanced API testing scenarios. The collection is focused on **CRUD operations**, **Dynamic Data Handling**, and **Performance/Load Testing** across different APIs. Implements chaining of request, leverage environment variables
 
 ---
 
@@ -38,7 +38,7 @@ This repository contains a comprehensive Postman collection designed to automate
 - **Postman Installed**: [Download Postman](https://www.postman.com/downloads/)
 - **APIs**: Access to GoRest API and ReqRes API.
 - **Environment Setup**:
-  - Create environment variables for:
+  - Create environment variables for eg:
     - `{{url}}`: Base URL of the API.
     - `{{access_token}}`: Bearer token for authentication.
 
@@ -47,11 +47,55 @@ This repository contains a comprehensive Postman collection designed to automate
   ```bash
   https://github.com/NidhiYadav726/AdvancedPostmanTemplate.git
 
+---
+
+### 3. Run Collection Locally
+
+**a. Manual Execution**
+Use Postman Collection Runner for manual runs:
+1. Open the Postman app.
+2. Import the `.json` files:
+   - Collection: `<collection-file.json>`
+   - Environment: `<environment-file.json>`
+3. Go to **Collection Runner**:
+   - Select the imported collection.
+   - Choose the environment.
+   - Configure settings like iterations or attach a data file (e.g., `data.csv`).
+4. Click **Run** to execute the collection.
+
+---
+
+**b. Command-Line Execution with Newman**
+
+1. Prerequisites
+   Ensure Newman is installed:
+   
+```bash
+
+npm install -g newman
+
+```
+2. Run the collection using the following command:
+   
+```bash
+newman run <collection-file.json> -e <environment-file.json>
+
+```
+3. Generate Reports
+
+```bash
+npm install -g newman-reporter-htmlextra
+--reporters cli,htmlextra
+```
+
+---
+
 ## 🔧 Tools and Technologies
 - **Postman**: For API testing and automation.
 - **Postman Scripts**: Pre-request and test scripts for dynamic and automated validations.
 - **Environment Variables**: For managing API configurations and data.
 - **CSV Integration**: For data-driven testing.
+- **Newman**: For command-line execution and CI/CD automation
 
 ---
 
