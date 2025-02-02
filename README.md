@@ -1,4 +1,4 @@
-# Advanced API Workflow Automation with Postman
+# Advanced API Workflow Automation with Postman: Harnessing Pre-Scripts, Post-Scripts and Dynamic Data Handling
 
 This repository contains a comprehensive Postman collection designed to automate advanced API testing scenarios. The collection is focused on **CRUD operations**, **Dynamic Data Handling**, and **Performance/Load Testing** across different APIs. Describes how to use advanced scripting features in Postman to automate complex API workflows. This includes chaining requests, dynamically generating data, managing environment variables, and leveraging collection runners for end-to-end test scenarios.
 
