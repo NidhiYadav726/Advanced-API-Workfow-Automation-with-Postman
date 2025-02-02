@@ -15,11 +15,11 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 2: Set up Node.js (required for Newman)
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '16'
 
@@ -72,19 +72,19 @@ jobs:
       # Step 6: Upload Newman Reports as Artifacts
       
       - name: Upload Crud Operations Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: CRUD_OPERATIONS_report
           path: newman_reports/crud_operations
           
       - name: Upload Dynamic Data Handling Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dynamic-data-report
           path: newman_reports/dynamic
 
       - name: Upload Load Test Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: load-test-report
           path: newman_reports/load
