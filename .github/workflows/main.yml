@@ -45,7 +45,6 @@ jobs:
           mkdir -p newman_reports/dynamic
           newman run "Dynamic Data Handling using CSV.postman_collection.json" \
             --environment "New Environment.postman_environment.json" \
-            --folder "DYNAMIC DATA HANDLING" \
             -d ./data.csv \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export ./newman_reports/dynamic/dynamic_data_handling_report.html
