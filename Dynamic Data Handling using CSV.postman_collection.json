@@ -1,0 +1,61 @@
+{
+	"info": {
+		"_postman_id": "7922fb24-cd6b-4965-a89c-f27117e5207d",
+		"name": "Dynamic Data Handling using CSV",
+		"description": "This folder is designed to demonstrate dynamic data handling with the ReqRes API for adding new products.\n\nThis collection is used to add 3 new products along with their respective name, price and category.\n\n- **Description**: This involves running a series of tests using multiple sets of data to simulate realistic user load and measure the API's performance.\n    \n- **Test Objective**: Test the Reqres API's scalability and response times under different scenarios, including various numbers of data inputs, and actions.\n    \n- **Test Steps**:\n    \n    - Create a CSV or JSON file containing multiple sets of test data (e.g., user IDs, names, statuses).\n        \n    - Use Postman’s Collection Runner to run the collection with different data sets from the CSV/JSON file.\n        \n    - For each iteration, measure the API's response time, status codes, and performance metrics.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36698587"
+	},
+	"item": [
+		{
+			"name": "Add new products using CSV file Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate Response Status Code is 201 for successfully adding new products",
+							"pm.test(\"Status code is 201 Created\", function () {",
+							"pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Validate Response body contains the product name a sper the csv file",
+							"pm.test(\"Response contains product name\", function () {",
+							"const jsonResponse = pm.response.json();",
+							"pm.expect(jsonResponse).to.have.property(\"name\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"{{name}}\",\n  \"price\": {{price}},\n  \"category\": \"{{category}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/products",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
